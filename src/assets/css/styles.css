@@ -2561,3 +2561,7 @@ footer {
   align-items: center;
   margin-bottom: 30px;
 }
+
+.object-card-price {
+  font-size: 25px;
+}

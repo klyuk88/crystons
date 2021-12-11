@@ -3,16 +3,18 @@
         class="select-dropdown__label" >
         <input
             class="select-dropdown__label-input"
-            type="radio"
-            name="Тип недвижимости"
-            value="gorodskaya"
-        /><span class="select-dropdown__label-txt">{{label}}</span>
+            type="checkbox"
+            name="type"
+            value=""
+            :id="id"
+        /><span class="select-dropdown__label-txt">{{name}}</span>
         </label>
 </template>
 <script>
 export default {
     props: {
-        label: String
+        name: String,
+        id: Number
     },
     setup(props, context) {
        

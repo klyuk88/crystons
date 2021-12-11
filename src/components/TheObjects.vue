@@ -77,8 +77,8 @@
                               class="select-dropdown__label-input"
                               type="radio"
                               name="Тип недвижимости"
-                              value="gorodskaya"
-                              @click="renderParams(item.id)"
+                              :value="item.id"
+                              @click="renderParams(item.id), getId(item.id)"
                             /><span class="select-dropdown__label-txt">{{
                               item.name
                             }}</span>
@@ -93,38 +93,21 @@
                 <!-- Filter type end  -->
 
                 <div class="objects-parametrs">
+
                   <objects-filter v-for="(item, index) in data.currentTerms" :key="index" :name="item.name" :id="item.id" :data="data">
+                  
                   </objects-filter>
                 </div>
-               
-
                 <button class="btn objects-controls-btn">Показать</button>
               </div>
             </div>
           </div>
         </div>
-        <!-- Objects list begin  -->
-        <div class="objects__content objects__content--active" data-tabs="1">
-          <div class="objects-list row">
-            <objects-item></objects-item>
-            <!-- More objects btn begin  -->
-            <div class="objects-list__item col-3 more-objects-btn">
-              <div class="objects-more title">
-                <a class="objects-more__link" href="#"
-                  >Показать еще <span>39 объектов</span>
-                </a>
-              </div>
-            </div>
-            <!-- More objects btn end  -->
-          </div>
-        </div>
-        <!-- Objects list end  -->
 
-        <!-- Map list begin  -->
-        <div class="objects__content" data-tabs="2">
-          <div id="map"></div>
-        </div>
-        <!-- Map list end  -->
+        <objects-list :currentObjectsId="firstTermId"></objects-list>
+
+        <the-map></the-map>
+      
       </div>
    </div>
   </div>
@@ -132,24 +115,30 @@
 
 <script>
 import { ref, onMounted, reactive } from "vue";
-import ObjectsItem from "./ObjectsItem.vue";
 import ObjectsFilter from "./ObjectsFilter.vue";
+import ObjectsList from './ObjectsList.vue';
+import TheMap from './TheMap.vue';
 export default {
-  components: { ObjectsItem, ObjectsFilter },
+  components: { ObjectsFilter, ObjectsList, TheMap },
   setup() {
     const data = reactive({
       terms: [], //все термины
       parentTerms: [], //термины верхней категории
       currentTerms: [], //термины первой верхнней категории
     })
+    const termsIds = ref([])
     const isOpen = ref(false)
     const isAnim = ref(false)
+    const firstTermId = ref(0)
+    
 
     function renderParams(id) {
       data.currentTerms = data.terms.filter(item => item.parent === id)
-      console.log(data.currentTerms)
     }
 
+    function getId(id) {
+      termsIds.value.push(id)
+    }
 
     function openList() {
       isOpen.value = !isOpen.value;
@@ -165,12 +154,13 @@ export default {
       if (res.ok) {
         let resData = await res.json();
         data.terms = resData;
-        data.parentTerms = resData.filter((item) => item.parent === 0);
-        const firstTermId = data.parentTerms[0].id;
-        data.currentTerms = resData.filter(
-          (item) => item.parent === firstTermId
+        data.parentTerms = data.terms.filter((item) => item.parent === 0);
+        firstTermId.value = data.parentTerms[0].id;
+        data.currentTerms = data.terms.filter(
+          (item) => item.parent === 11
         );
       }
+      
     });
 
     return {
@@ -178,7 +168,9 @@ export default {
       openList,
       isOpen,
       isAnim,
-      renderParams
+      renderParams,
+      firstTermId,
+      getId
     };
   },
 };

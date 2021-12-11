@@ -24,7 +24,7 @@
                     >
                       <div class="select-dropdown__content">
                         <div class="select-dropdown__list render-list">
-                          <label-item v-for="(term, index) in childTerms" :key="index" :label="term.name"></label-item>
+                          <label-item v-for="(item, index) in childTerms.terms" :key="index" :name="item.name" :id="item.id"></label-item>
                         </div>
                       </div>
                     </div>
@@ -33,7 +33,7 @@
                 </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, reactive, onUpdated, } from "vue";
 import LabelItem from './LabelItem.vue';
 
 export default {
@@ -48,14 +48,29 @@ export default {
   setup(props) {
     const isOpen = ref(false);
     const isAnim = ref(false);
-    const childTerms = ref([])
-    childTerms.value = props.data.terms.filter(item => item.parent === props.id)
+    const childTerms = reactive({
+        terms: []
+    })
+    childTerms.terms = props.data.terms.filter(item => item.parent === props.id)
+
+
     function openList() {
       isOpen.value = !isOpen.value;
       setTimeout(() => {
         isAnim.value = !isAnim.value;
       });
     }
+ 
+  
+    onUpdated(async () => {
+        let res = await fetch('http://localhost:8888/estate/wp-json/wp/v2/type_object?parent=' + props.id)
+        if(res.ok) {
+          const childData = await res.json()
+          childTerms.terms = childData
+        }
+    })
+    
+
     return {
       isOpen,
       openList,

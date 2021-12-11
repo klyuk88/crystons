@@ -2438,6 +2438,10 @@
     z-index: 10;
     display: none;
   }
+
+  .close-project.d-block {
+    display: block;
+  }
   
   @media screen and (max-width: 576px){
     .close-project {
@@ -2609,4 +2613,8 @@
 
 .objects-controls-filters-wrap {
   align-items: center;
+}
+
+.object-card-price {
+  font-size: 25px;
 }
