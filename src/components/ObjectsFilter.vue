@@ -6,7 +6,7 @@
                   "
                 >
                   <div class="select">
-                    <div class="select-btn" @click="openList" :data-slug="slug">
+                    <div class="select-btn" @click="openList">
                       <div class="select-btn__txt">{{parentName}}</div>
                       <svg
                         class="svg-sprite-icon icon-arrow"
@@ -58,7 +58,6 @@ export default {
   props: {
     parentName: String,
     slug: String,
-    data: Object
   },
 
   setup(props, context) {
@@ -72,6 +71,12 @@ export default {
         isAnim.value = !isAnim.value;
       });
     }
+
+    onMounted(() => {
+      console.log(props.slug);
+    })
+
+
 
     return {
       isOpen,

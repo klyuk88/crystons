@@ -101,8 +101,7 @@
                     v-for="(item, index) in data.typesTerms"
                     :key="index"
                     :parent-name="item.name"
-                    :slug="item.slug"
-                    :data="data"
+                    :slug="item.rest_base"
                   >
                   </objects-filter>
                 </div>
@@ -133,7 +132,6 @@ export default {
     const data = reactive({
       types: [],
       typesTerms: [],
-      typesTermsChilds: [],
     });
 
     const isOpen = ref(false);
@@ -154,17 +152,6 @@ export default {
       if (res.ok) {
         let resData = await res.json();
         data.typesTerms = Object.values(resData);
-        data.typesTerms.forEach(async (elem) => {
-          let res2 = await fetch(
-            "https://staging.getcode.tech/wp-json/wp/v2/" +
-              elem.rest_base +
-              "?hide_empty=true"
-          );
-          if (res2.ok) {
-            let resData2 = await res2.json();
-            data.typesTermsChilds = resData2;
-          }
-        });
       }
     });
 
@@ -192,18 +179,7 @@ export default {
         if (res2.ok) {
           let resData2 = await res2.json();
           data.typesTerms = Object.values(resData2);
-          data.typesTerms.forEach(async (elem) => {
-            let res3 = await fetch(
-              "https://staging.getcode.tech/wp-json/wp/v2/" +
-                elem.rest_base +
-                "?hide_empty=true"
-            );
-            if (res3.ok) {
-              let resData3 = await res3.json();
-              data.typesTermsChilds = resData3;
-              // console.log(data.typesTermsChilds);
-            }
-          });
+          
         }
       }
     });
