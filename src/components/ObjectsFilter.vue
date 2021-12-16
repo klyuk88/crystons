@@ -37,13 +37,7 @@
 </template>
 <script>
 import {
-  ref,
-  reactive,
-  onUpdated,
-  computed,
-  watch,
-  onMounted,
-  onUnmounted
+  ref
 } from "vue";
 import LabelItemVue from './LabelItem.vue';
 
@@ -64,8 +58,6 @@ export default {
         isAnim.value = !isAnim.value;
       });
     }
-
-  
 
     return {
       isOpen,

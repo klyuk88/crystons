@@ -12,37 +12,40 @@
         </label>
 </template>
 <script>
-import {ref, onUpdated, onMounted} from 'vue'
+import { ref, onMounted, watch, computed} from "vue";
 export default {
-    props: {
-        parentName: String,
-        parentSlug: String
-    },
-    setup(props, context) {
-
-        const terms = ref([])
-
-
-        onMounted(async() => {
-           let res = await fetch(`https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`)
-           let resData = await res.json()
-           terms.value = resData
-           console.log(terms.value);
-        })
-
-
-        onUpdated(async ()=> {
-            let res = await fetch(`https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`)
-           let resData = await res.json()
-           terms.value = resData
-        //    console.log(terms.value);
-        })
-
-        return {
-            terms
-        }
-     
+  props: {
+    parentName: String,
+    parentSlug: String,
+  },
+  setup(props, context) {
+    const terms = ref([])
+    const getTerms = async () => {
+      let res = await fetch(
+        `https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`
+      );
+      let resData = await res.json();
+      terms.value = resData;
     }
-    
-}
+
+
+    onMounted(getTerms)
+
+    return {
+      terms
+    }
+  },
+};
 </script>
+
+
+  watch(
+      () => props.parentSlug,
+      (first, second) => {
+        console.log(
+          "Watch props.selected function called with args:",
+          first,
+          second
+        );
+      }
+    );
