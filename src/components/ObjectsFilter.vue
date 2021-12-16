@@ -17,25 +17,17 @@
                         ></use>
                       </svg>
                     </div>
-
                     <div
                       class="select-dropdown"
                       :class="{ 'd-block': isOpen, 'd-animate': isAnim }"
                     >
                       <div class="select-dropdown__content">
                         <div class="select-dropdown__list render-list">
-                    
-                          <!-- <label v-for="(item, index) in typeItemData.childTerms"
-                            class="select-dropdown__label"
-                            >
-                            <input
-                                class="select-dropdown__label-input"
-                                type="checkbox"
-                                :name="parentName"
-                                :value="item.slug"
-                                
-                            /><span class="select-dropdown__label-txt">{{item.name}}</span>
-                            </label> -->
+                          <label-item-vue
+                          :parent-name="parentName"
+                          :parent-slug="slug"
+                          >
+                          </label-item-vue>
                         </div>
                       </div>
                     </div>
@@ -53,15 +45,16 @@ import {
   onMounted,
   onUnmounted
 } from "vue";
+import LabelItemVue from './LabelItem.vue';
 
 export default {
+  components: {LabelItemVue},
   props: {
     parentName: String,
     slug: String,
   },
 
   setup(props, context) {
-   
     const isOpen = ref(false);
     const isAnim = ref(false);
 
@@ -72,17 +65,12 @@ export default {
       });
     }
 
-    onMounted(() => {
-      console.log(props.slug);
-    })
-
-
+  
 
     return {
       isOpen,
       openList,
       isAnim,
-      // typeItemData,
     };
   },
 };

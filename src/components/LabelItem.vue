@@ -1,23 +1,46 @@
 <template lang="">
      <label
-        class="select-dropdown__label" >
+        class="select-dropdown__label"
+        v-for="(item, index) in terms" :key="index"
+        >
         <input
             class="select-dropdown__label-input"
             type="checkbox"
             :name="parentName"
-            :value="name"
-        /><span class="select-dropdown__label-txt">{{name}}</span>
+            :value="item.rest_base"
+        /><span class="select-dropdown__label-txt">{{item.name}}</span>
         </label>
 </template>
 <script>
-import {ref, watch, reactive} from 'vue'
+import {ref, onUpdated, onMounted} from 'vue'
 export default {
     props: {
-        name: String,
-        id: Number,
-        parentName: String
+        parentName: String,
+        parentSlug: String
     },
     setup(props, context) {
+
+        const terms = ref([])
+
+
+        onMounted(async() => {
+           let res = await fetch(`https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`)
+           let resData = await res.json()
+           terms.value = resData
+           console.log(terms.value);
+        })
+
+
+        onUpdated(async ()=> {
+            let res = await fetch(`https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`)
+           let resData = await res.json()
+           terms.value = resData
+        //    console.log(terms.value);
+        })
+
+        return {
+            terms
+        }
      
     }
     
