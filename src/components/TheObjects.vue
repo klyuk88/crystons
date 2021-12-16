@@ -70,15 +70,18 @@
                         <div class="select-dropdown__list render-list">
                           <label
                             class="select-dropdown__label"
-                            v-for="(item, index) in data.parentTerms"
+                            v-for="(item, index) in data.types"
                             :key="index"
                           >
                             <input
                               class="select-dropdown__label-input"
                               type="radio"
                               name="Тип недвижимости"
-                              :value="item.id"
-                              @click="renderParams(item.id), getId(item.id)"
+                              :value="item.slug"
+                              v-model="typeEstate"
+                              :checked="
+                                item.slug === 'live_object' ? true : false
+                              "
                             /><span class="select-dropdown__label-txt">{{
                               item.name
                             }}</span>
@@ -92,53 +95,50 @@
 
                 <!-- Filter type end  -->
 
+                <!-- параметры  -->
                 <div class="objects-parametrs">
-
-                  <objects-filter v-for="(item, index) in data.currentTerms" :key="index" :name="item.name" :id="item.id" :data="data">
-                  
+                  <objects-filter
+                    v-for="(item, index) in data.typesTerms"
+                    :key="index"
+                    :parent-name="item.name"
+                    :slug="item.slug"
+                    :data="data"
+                  >
                   </objects-filter>
                 </div>
+
+                <!-- кнопка показать  -->
                 <button class="btn objects-controls-btn">Показать</button>
               </div>
             </div>
           </div>
         </div>
 
-        <objects-list :currentObjectsId="firstTermId"></objects-list>
+        <!-- <objects-list :currentObjectsId="firstTermId"></objects-list> -->
 
         <the-map></the-map>
-      
       </div>
-   </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, watch } from "vue";
 import ObjectsFilter from "./ObjectsFilter.vue";
-import ObjectsList from './ObjectsList.vue';
-import TheMap from './TheMap.vue';
+import TheMap from "./TheMap.vue";
+
 export default {
-  components: { ObjectsFilter, ObjectsList, TheMap },
+  components: { TheMap, ObjectsFilter },
   setup() {
     const data = reactive({
-      terms: [], //все термины
-      parentTerms: [], //термины верхней категории
-      currentTerms: [], //термины первой верхнней категории
-    })
-    const termsIds = ref([])
-    const isOpen = ref(false)
-    const isAnim = ref(false)
-    const firstTermId = ref(0)
-    
+      types: [],
+      typesTerms: [],
+      typesTermsChilds: [],
+    });
 
-    function renderParams(id) {
-      data.currentTerms = data.terms.filter(item => item.parent === id)
-    }
-
-    function getId(id) {
-      termsIds.value.push(id)
-    }
+    const isOpen = ref(false);
+    const isAnim = ref(false);
+    const typeEstate = ref(null);
 
     function openList() {
       isOpen.value = !isOpen.value;
@@ -147,20 +147,65 @@ export default {
       });
     }
 
-    onMounted(async () => {
+    watch(typeEstate, async (newValue) => {
       let res = await fetch(
-        "http://localhost:8888/estate/wp-json/wp/v2/type_object"
+        "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" + newValue
       );
       if (res.ok) {
         let resData = await res.json();
-        data.terms = resData;
-        data.parentTerms = data.terms.filter((item) => item.parent === 0);
-        firstTermId.value = data.parentTerms[0].id;
-        data.currentTerms = data.terms.filter(
-          (item) => item.parent === 11
-        );
+        data.typesTerms = Object.values(resData);
+        data.typesTerms.forEach(async (elem) => {
+          let res2 = await fetch(
+            "https://staging.getcode.tech/wp-json/wp/v2/" +
+              elem.rest_base +
+              "?hide_empty=true"
+          );
+          if (res2.ok) {
+            let resData2 = await res2.json();
+            data.typesTermsChilds = resData2;
+          }
+        });
       }
-      
+    });
+
+    onMounted(async () => {
+      let res = await fetch("https://staging.getcode.tech/wp-json/wp/v2/types");
+      if (res.ok) {
+        let resData = await res.json();
+        data.types = Object.values(resData);
+        data.types = data.types.filter((item) => {
+          if (
+            item.slug !== "page" &&
+            item.slug !== "post" &&
+            item.slug !== "wp_block" &&
+            item.slug !== "attachment" &&
+            item.slug !== "wp_template"
+          ) {
+            return item;
+          }
+        });
+
+        let res2 = await fetch(
+          "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" +
+            data.types[0].slug
+        );
+        if (res2.ok) {
+          let resData2 = await res2.json();
+          data.typesTerms = Object.values(resData2);
+          data.typesTerms.forEach(async (elem) => {
+            let res3 = await fetch(
+              "https://staging.getcode.tech/wp-json/wp/v2/" +
+                elem.rest_base +
+                "?hide_empty=true"
+            );
+            if (res3.ok) {
+              let resData3 = await res3.json();
+              data.typesTermsChilds = resData3;
+              // console.log(data.typesTermsChilds);
+            }
+          });
+        }
+      }
     });
 
     return {
@@ -168,9 +213,7 @@ export default {
       openList,
       isOpen,
       isAnim,
-      renderParams,
-      firstTermId,
-      getId
+      typeEstate,
     };
   },
 };

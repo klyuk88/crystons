@@ -6,8 +6,8 @@
                   "
                 >
                   <div class="select">
-                    <div class="select-btn" @click="openList">
-                      <div class="select-btn__txt">{{name}}</div>
+                    <div class="select-btn" @click="openList" :data-slug="slug">
+                      <div class="select-btn__txt">{{parentName}}</div>
                       <svg
                         class="svg-sprite-icon icon-arrow"
                         :class="{ rotate: isOpen }"
@@ -24,7 +24,18 @@
                     >
                       <div class="select-dropdown__content">
                         <div class="select-dropdown__list render-list">
-                          <label-item v-for="(item, index) in childTerms.terms" :key="index" :name="item.name" :id="item.id"></label-item>
+                    
+                          <!-- <label v-for="(item, index) in typeItemData.childTerms"
+                            class="select-dropdown__label"
+                            >
+                            <input
+                                class="select-dropdown__label-input"
+                                type="checkbox"
+                                :name="parentName"
+                                :value="item.slug"
+                                
+                            /><span class="select-dropdown__label-txt">{{item.name}}</span>
+                            </label> -->
                         </div>
                       </div>
                     </div>
@@ -33,26 +44,27 @@
                 </div>
 </template>
 <script>
-import { ref, reactive, onUpdated, } from "vue";
-import LabelItem from './LabelItem.vue';
+import {
+  ref,
+  reactive,
+  onUpdated,
+  computed,
+  watch,
+  onMounted,
+  onUnmounted
+} from "vue";
 
 export default {
-  components: {LabelItem},
-   props: {
-    name: String,
-    id: Number,
+  props: {
+    parentName: String,
+    slug: String,
     data: Object
   },
 
- 
-  setup(props) {
+  setup(props, context) {
+   
     const isOpen = ref(false);
     const isAnim = ref(false);
-    const childTerms = reactive({
-        terms: []
-    })
-    childTerms.terms = props.data.terms.filter(item => item.parent === props.id)
-
 
     function openList() {
       isOpen.value = !isOpen.value;
@@ -60,22 +72,12 @@ export default {
         isAnim.value = !isAnim.value;
       });
     }
- 
-  
-    onUpdated(async () => {
-        let res = await fetch('http://localhost:8888/estate/wp-json/wp/v2/type_object?parent=' + props.id)
-        if(res.ok) {
-          const childData = await res.json()
-          childTerms.terms = childData
-        }
-    })
-    
 
     return {
       isOpen,
       openList,
       isAnim,
-      childTerms
+      // typeItemData,
     };
   },
 };
