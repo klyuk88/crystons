@@ -37,15 +37,3 @@ export default {
   },
 };
 </script>
-
-
-  watch(
-      () => props.parentSlug,
-      (first, second) => {
-        console.log(
-          "Watch props.selected function called with args:",
-          first,
-          second
-        );
-      }
-    );

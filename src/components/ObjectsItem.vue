@@ -11,31 +11,29 @@
                 <div class="objects-card__img">
                   <picture>
                     <source
-                      srcset="../assets/images/content/objects-1.webp"
-                      type="image/webp"
+                      :srcset="itemImage"
+                      type="image/png"
                     />
                     <img
-                      src="../assets/images/content/objects-1.jpg"
+                      :src="itemImage"
                       width="630"
                       height="450"
-                      alt="img"
+                      :alt="name"
                     />
                   </picture>
                 </div>
                 <div class="objects-card__desc">
                   <div class="objects-card__txt">
-                    {{contentFree}}
+                    {{content}}
                   </div>
                   <div class="objects-card__list">
-                    <!-- <div class="objects-card__list-item">
-                      51 квартира в продаже
-                    </div> -->
                     <div class="objects-card__list-item object-card-price">Цена: от {{price}}</div>
                   </div>
                   <div class="objects-card__links">
                     <a
                       class="objects-card__link objects-card__back"
-                      href="#"
+                      :href="itemPresentation"
+                      target="_blank"
                       download
                       >СКАЧАТЬ ПРЕЗЕНТАЦИЮ</a
                     >
@@ -54,33 +52,52 @@
           </div>
 </template>
 <script>
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from "vue";
 export default {
   props: {
     name: String,
     adress: String,
     price: String,
-    content: String
+    content: String,
+    imageId: Number,
+    presentationId: Number,
   },
-    setup(props) {
-      const objectOpen = ref(false)
-      const contentFree = ref('')
-      contentFree.value = props.content
-      contentFree.value = contentFree.value.replace(/<\/?[a-zA-Z]+>/gi,'')
-      
-      function openObjectInfo() {
-        objectOpen.value = true
-      }
-      function closeObjectInfo(event) {
-          objectOpen.value = false
-      }
-      return {
-        objectOpen, openObjectInfo, closeObjectInfo, contentFree
-      }
-    }
-}
+  setup(props) {
+
+
+    const itemImage = ref("");
+    const itemPresentation = ref("");
+
+    const getMedia = async (imageId, link) => {
+      let res = await fetch(
+        "https://staging.getcode.tech/wp-json/wp/v2/media/" + imageId
+      );
+      let resData = await res.json();
+      link['value'] = resData.source_url;
+    };
+
+    const objectOpen = ref(false);
+    const openObjectInfo = () => {
+      objectOpen.value = true;
+    };
+    const closeObjectInfo = () => {
+      objectOpen.value = false;
+    };
+
+    onMounted(() => {
+      getMedia(props.imageId, itemImage);
+      getMedia(props.presentationId, itemPresentation);
+    });
+
+    return {
+      objectOpen,
+      openObjectInfo,
+      closeObjectInfo,
+      itemImage,
+      itemPresentation
+    };
+  },
+};
 </script>
 <style lang="">
-
-    
 </style>

@@ -101,19 +101,24 @@
                     v-for="(item, index) in data.typesTerms"
                     :key="index"
                     :parent-name="item.name"
-                    :slug="item.rest_base"
+                    :slug="item.slug"
+                    :rest-base="item.rest_base"
+                    @itemChange="getParamsFormInput"
+                    @clearParams="clearParams"
                   >
                   </objects-filter>
                 </div>
 
                 <!-- кнопка показать  -->
-                <button class="btn objects-controls-btn">Показать</button>
+                <button class="btn objects-controls-btn" @click="showObjects">
+                  Показать
+                </button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- <objects-list :currentObjectsId="firstTermId"></objects-list> -->
+        <objects-list></objects-list>
 
         <the-map></the-map>
       </div>
@@ -125,9 +130,10 @@
 import { ref, onMounted, reactive, watch } from "vue";
 import ObjectsFilter from "./ObjectsFilter.vue";
 import TheMap from "./TheMap.vue";
+import ObjectsList from "./ObjectsList.vue";
 
 export default {
-  components: { TheMap, ObjectsFilter },
+  components: { TheMap, ObjectsFilter, ObjectsList },
   setup() {
     const data = reactive({
       types: [],
@@ -136,26 +142,24 @@ export default {
 
     const isOpen = ref(false);
     const isAnim = ref(false);
-    const typeEstate = ref(null);
-
-    function openList() {
+    const openList = () => {
       isOpen.value = !isOpen.value;
       setTimeout(() => {
         isAnim.value = !isAnim.value;
       });
-    }
+    };
 
-    watch(typeEstate, async (newValue) => {
+    const getTerms = async (value) => {
       let res = await fetch(
-        "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" + newValue
+        "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" + value
       );
       if (res.ok) {
         let resData = await res.json();
         data.typesTerms = Object.values(resData);
       }
-    });
+    };
 
-    onMounted(async () => {
+    const getTypes = async () => {
       let res = await fetch("https://staging.getcode.tech/wp-json/wp/v2/types");
       if (res.ok) {
         let resData = await res.json();
@@ -171,17 +175,41 @@ export default {
             return item;
           }
         });
+      }
+    };
 
-        let res2 = await fetch(
-          "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" +
-            data.types[0].slug
-        );
-        if (res2.ok) {
-          let resData2 = await res2.json();
-          data.typesTerms = Object.values(resData2);
-          
+    const paramsItems = reactive({
+      params: {},
+    });
+    const getParamsFormInput = (itemIds, itemRestBase) => {
+      paramsItems.params[itemRestBase] = itemIds;
+      console.log(paramsItems.params);
+    };
+
+    const clearParams = () => {
+      paramsItems.params = {};
+    };
+
+    const typeEstate = ref("live_object");
+    watch(typeEstate, (newVal) => {
+      getTerms(newVal);
+    });
+
+    const showObjects = () => {
+      let url = `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`;
+      let paramsArr = [];
+      for (const [key, value] of Object.entries(paramsItems.params)) {
+        if (value.length) {
+          paramsArr.push(`${key}=${value}`);
         }
       }
+        const paramsStr = "?" + paramsArr.join("&");
+        console.log(paramsStr);
+    };
+
+    onMounted(() => {
+      getTypes();
+      getTerms("live_object");
     });
 
     return {
@@ -190,6 +218,9 @@ export default {
       isOpen,
       isAnim,
       typeEstate,
+      getParamsFormInput,
+      showObjects,
+      clearParams,
     };
   },
 };
@@ -202,3 +233,14 @@ export default {
 }
 </style>
 
+https://staging.getcode.tech/wp-json/wp/v2/live_object?live_district=63
+https://staging.getcode.tech/wp-json/wp/v2/${typeEstate}?
+
+
+'live_object'
+{
+  live_price: 1,2,3,
+  live_district: 1,2,3
+}
+
+live_object ? live_district=63,34 & live_deadline=1,2,4
