@@ -26,13 +26,20 @@
           <div class="col-3">
             <!-- Switch objects lists begin -->
             <div class="objects-controls__switch">
-              <div class="objects-switch">
+              <div class="objects-switch" :class="{'objects-switch--pos-2': isSwitched}">
+              
+                <span class="objects-switch__link"
+                :class="{'objects-switch__link--selected': !isSwitched}"
+                data-btn="1"
+                @click="switchHeandler"
+                >Список</span>
+                
                 <span
-                  class="objects-switch__link objects-switch__link--selected"
-                  data-tabs="1"
-                  >Список</span
-                >
-                <span class="objects-switch__link" data-tabs="2">Карта</span>
+                class="objects-switch__link"
+                :class="{'objects-switch__link--selected': isSwitched}"
+                @click="switchHeandler"
+                data-btn="2"
+                >Карта</span>
                 <span class="objects-switch__bg"></span>
               </div>
             </div>
@@ -101,8 +108,7 @@
                     v-for="(item, index) in data.typesTerms"
                     :key="index"
                     :parent-name="item.name"
-                    :slug="item.slug"
-                    :rest-base="item.rest_base"
+                    :slug="item.rest_base"
                     @itemChange="getParamsFormInput"
                     @clearParams="clearParams"
                   >
@@ -110,17 +116,24 @@
                 </div>
 
                 <!-- кнопка показать  -->
-                <button class="btn objects-controls-btn" @click="showObjects">
+                <button class="btn objects-controls-btn" @click="createUrl">
                   Показать
                 </button>
               </div>
             </div>
           </div>
         </div>
+    
+    
+        <objects-list
+        :active="isSwitched"
+        :objects-list-url="objectsListUrl"
+        ></objects-list>
 
-        <objects-list></objects-list>
-
-        <the-map></the-map>
+        <the-map
+        :active="isSwitched"
+        :objects-list-url="objectsListUrl"
+        ></the-map>
       </div>
     </div>
   </div>
@@ -139,6 +152,15 @@ export default {
       types: [],
       typesTerms: [],
     });
+
+    const isSwitched = ref(false)
+    const switchHeandler = (event) => {
+        if(event.target.getAttribute('data-btn') === "1") {
+          isSwitched.value = false
+        } else {
+          isSwitched.value = true
+        }
+    }
 
     const isOpen = ref(false);
     const isAnim = ref(false);
@@ -183,7 +205,6 @@ export default {
     });
     const getParamsFormInput = (itemIds, itemRestBase) => {
       paramsItems.params[itemRestBase] = itemIds;
-      console.log(paramsItems.params);
     };
 
     const clearParams = () => {
@@ -193,19 +214,28 @@ export default {
     const typeEstate = ref("live_object");
     watch(typeEstate, (newVal) => {
       getTerms(newVal);
+      objectsListUrl.value = "https://staging.getcode.tech/wp-json/wp/v2/" + newVal
     });
 
-    const showObjects = () => {
+    const objectsListUrl = ref("")
+
+    const createUrl = () => {
       let url = `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`;
-      let paramsArr = [];
+      const paramsArr = [];
       for (const [key, value] of Object.entries(paramsItems.params)) {
         if (value.length) {
           paramsArr.push(`${key}=${value}`);
         }
       }
+      if (paramsArr.length) {
         const paramsStr = "?" + paramsArr.join("&");
-        console.log(paramsStr);
+        objectsListUrl.value = url + paramsStr;
+      } else {
+        objectsListUrl.value = url
+      }
     };
+
+
 
     onMounted(() => {
       getTypes();
@@ -219,8 +249,11 @@ export default {
       isAnim,
       typeEstate,
       getParamsFormInput,
-      showObjects,
+      createUrl,
       clearParams,
+      objectsListUrl,
+      isSwitched,
+      switchHeandler
     };
   },
 };
@@ -233,14 +266,3 @@ export default {
 }
 </style>
 
-https://staging.getcode.tech/wp-json/wp/v2/live_object?live_district=63
-https://staging.getcode.tech/wp-json/wp/v2/${typeEstate}?
-
-
-'live_object'
-{
-  live_price: 1,2,3,
-  live_district: 1,2,3
-}
-
-live_object ? live_district=63,34 & live_deadline=1,2,4

@@ -1,6 +1,6 @@
 <template lang="">
       <!-- Objects list begin  -->
-        <div class="objects__content objects__content--active" data-tabs="1">
+        <div class="objects__content" :class="{'objects__content--active': !active}">
             
           <div class="objects-list row">
             <objects-item
@@ -19,25 +19,34 @@
         <!-- Objects list end  -->
 </template>
 <script>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import ObjectsItem from "./ObjectsItem.vue"
 import MoreButton from './MoreButton.vue'
 
 export default {
   components: { ObjectsItem, MoreButton },
   props: {
-      typeEstate: String
+      typeEstate: String,
+      objectsListUrl: String,
+      active: Boolean
   },
   setup(props) {
 
       const currentObjects = ref([])
-      const getObjects = async () => {
-          let res = await fetch(`https://staging.getcode.tech/wp-json/wp/v2/live_object`)
+
+      const getObjects = async (url) => {
+          let res = await fetch(url)
           let resData = await res.json()
           currentObjects.value = resData
       }
+
+      watch(() => props.objectsListUrl,(newValue) => {
+          getObjects(newValue)
+      })
+
+
       onMounted(()=> {
-         getObjects()
+         getObjects("https://staging.getcode.tech/wp-json/wp/v2/live_object")
       })
     return {
         currentObjects

@@ -49,7 +49,6 @@ export default {
   props: {
     parentName: String,
     slug: String,
-    restBase: String,
   },
   emits: ["itemChange", "clearParams"],
 
