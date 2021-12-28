@@ -6,40 +6,50 @@
         <div class="row">
           <div class="col-3">
             <!-- Search objects begin -->
-            <form class="objects-search" action="/">
-              <button
-                class="objects-search__btn"
-                type="submit"
-                aria-label="search"
-              >
-                <img
-                  src="../assets/images/general/search.svg"
-                  width="36"
-                  height="36"
-                  alt=""
-                />
-              </button>
-              <input class="objects-search__input" type="text" />
-            </form>
+            <button
+              class="objects-search__btn"
+              type="submit"
+              aria-label="search"
+              @click="searchHeandler"
+            >
+              <img
+                src="../assets/images/general/search.svg"
+                width="36"
+                height="36"
+                alt=""
+              />
+            </button>
+            <input
+              class="objects-search__input"
+              type="text"
+              placeholder="Hазвание, район, адрес, метро"
+              v-model.trim.lazy="searchInput"
+              @keyup.enter="searchHeandler"
+            />
             <!-- Search objects end -->
           </div>
           <div class="col-3">
             <!-- Switch objects lists begin -->
             <div class="objects-controls__switch">
-              <div class="objects-switch" :class="{'objects-switch--pos-2': isSwitched}">
-              
-                <span class="objects-switch__link"
-                :class="{'objects-switch__link--selected': !isSwitched}"
-                data-btn="1"
-                @click="switchHeandler"
-                >Список</span>
-                
+              <div
+                class="objects-switch"
+                :class="{ 'objects-switch--pos-2': isSwitched }"
+              >
                 <span
-                class="objects-switch__link"
-                :class="{'objects-switch__link--selected': isSwitched}"
-                @click="switchHeandler"
-                data-btn="2"
-                >Карта</span>
+                  class="objects-switch__link"
+                  :class="{ 'objects-switch__link--selected': !isSwitched }"
+                  data-btn="1"
+                  @click="switchHeandler"
+                  >Список</span
+                >
+
+                <span
+                  class="objects-switch__link"
+                  :class="{ 'objects-switch__link--selected': isSwitched }"
+                  @click="switchHeandler"
+                  data-btn="2"
+                  >Карта</span
+                >
                 <span class="objects-switch__bg"></span>
               </div>
             </div>
@@ -123,17 +133,24 @@
             </div>
           </div>
         </div>
-    
-    
-        <objects-list
-        :active="isSwitched"
-        :objects-list-url="objectsListUrl"
-        ></objects-list>
+        <h2 class="not-found-search-title" v-if="searchObjectsList.length === 0 && notSearchResult">По вашему запросу ничего не найдено</h2>
+        <template v-else>
+          <objects-list
+          :objects-list-url="objectsListUrl"
+            :active="isSwitched"
+            :objects-list="
+              searchObjectsList.length ? searchObjectsList : objectsList
+            "
+          ></objects-list>
 
-        <the-map
-        :active="isSwitched"
-        :objects-list-url="objectsListUrl"
-        ></the-map>
+          <the-map
+            :active="isSwitched"
+            :objects-list="
+              searchObjectsList.length ? searchObjectsList : objectsList
+            "
+          ></the-map>
+        </template>
+       
       </div>
     </div>
   </div>
@@ -153,14 +170,20 @@ export default {
       typesTerms: [],
     });
 
-    const isSwitched = ref(false)
+    const isSwitched = ref(false);
     const switchHeandler = (event) => {
-        if(event.target.getAttribute('data-btn') === "1") {
-          isSwitched.value = false
-        } else {
-          isSwitched.value = true
-        }
-    }
+      if (event.target.getAttribute("data-btn") === "1") {
+        isSwitched.value = false;
+      } else {
+        isSwitched.value = true;
+      }
+    };
+
+    const getData = async (url, refLink) => {
+      let res = await fetch(url);
+      let resData = await res.json();
+      refLink["value"] = resData;
+    };
 
     const isOpen = ref(false);
     const isAnim = ref(false);
@@ -203,22 +226,6 @@ export default {
     const paramsItems = reactive({
       params: {},
     });
-    const getParamsFormInput = (itemIds, itemRestBase) => {
-      paramsItems.params[itemRestBase] = itemIds;
-    };
-
-    const clearParams = () => {
-      paramsItems.params = {};
-    };
-
-    const typeEstate = ref("live_object");
-    watch(typeEstate, (newVal) => {
-      getTerms(newVal);
-      objectsListUrl.value = "https://staging.getcode.tech/wp-json/wp/v2/" + newVal
-    });
-
-    const objectsListUrl = ref("")
-
     const createUrl = () => {
       let url = `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`;
       const paramsArr = [];
@@ -231,15 +238,68 @@ export default {
         const paramsStr = "?" + paramsArr.join("&");
         objectsListUrl.value = url + paramsStr;
       } else {
-        objectsListUrl.value = url
+        objectsListUrl.value = url;
       }
     };
+    const getParamsFormInput = (itemIds, itemRestBase) => {
+      paramsItems.params[itemRestBase] = itemIds;
+    };
 
+    const clearParams = () => {
+      paramsItems.params = {};
+    };
 
+    const objectsListUrl = ref("");
+    const objectsList = ref([]);
+    const typeEstate = ref("live_object");
+
+    watch(typeEstate, (newVal) => {
+      getTerms(newVal);
+      objectsListUrl.value =
+        "https://staging.getcode.tech/wp-json/wp/v2/" + newVal;
+      searchInput.value = "";
+      searchObjectsList.value = [];
+      notSearchResult.value = false
+    });
+
+    watch(objectsListUrl, (newVal) => {
+      searchInput.value = "";
+      searchObjectsList.value = [];
+      getData(newVal, objectsList);
+    });
+
+    const searchInput = ref(null);
+    const searchObjectsList = ref([]);
+    const notSearchResult = ref(false)
+    const searchHeandler = () => {
+      if (searchInput !== "") {
+        searchObjectsList.value = objectsList.value.filter((item) => {
+          const regexp = new RegExp(`${searchInput.value}`, "i");
+          const adressSearch = item.acf.adress.match(regexp) || [];
+          const titleSearch = item.title.rendered.match(regexp) || [];
+          if (titleSearch.length || adressSearch.length) {
+            return true;
+          }
+        });
+        if(searchObjectsList.value.length === 0) {
+          notSearchResult.value = true
+        } else {
+          notSearchResult.value = false
+        }
+        
+      } else {
+        searchObjectsList.value = [];
+        notSearchResult.value = false
+      }
+    };
 
     onMounted(() => {
       getTypes();
       getTerms("live_object");
+      getData(
+        `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`,
+        objectsList
+      );
     });
 
     return {
@@ -251,9 +311,14 @@ export default {
       getParamsFormInput,
       createUrl,
       clearParams,
-      objectsListUrl,
       isSwitched,
-      switchHeandler
+      switchHeandler,
+      searchInput,
+      searchHeandler,
+      objectsList,
+      searchObjectsList,
+      notSearchResult,
+      objectsListUrl
     };
   },
 };
@@ -263,6 +328,14 @@ export default {
 .objects-controls-filters-wrap {
   align-items: center;
   margin-bottom: 30px;
+}
+.not-found-search-title {
+  font-size: 30px;
+  font-family: 'TT Tsars A';
+  padding: 50px 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 </style>
 

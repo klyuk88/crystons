@@ -9,28 +9,18 @@
                 @click.stop="closeObjectInfo"
                 >✕</span>
                 <div class="objects-card__img">
-                  <picture>
-                    <source
-                      :srcset="itemImage"
-                      type="image/png"
-                    />
-                    <img
-                      :src="itemImage"
-                      width="630"
-                      height="450"
-                      :alt="name"
-                    />
-                  </picture>
+                  <img :src="itemImage" :alt="name"/>
                 </div>
                 <div class="objects-card__desc">
                   <div class="objects-card__txt">
                     {{content}}
                   </div>
                   <div class="objects-card__list">
-                    <div class="objects-card__list-item object-card-price">Цена: от {{price}}</div>
+                    <div class="objects-card__list-item object-card-price">Цена: {{numberFormatter(price)}}</div>
                   </div>
                   <div class="objects-card__links">
                     <a
+                    v-if="itemPresentation"
                       class="objects-card__link objects-card__back"
                       :href="itemPresentation"
                       target="_blank"
@@ -52,18 +42,25 @@
           </div>
 </template>
 <script>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 export default {
   props: {
     name: String,
     adress: String,
     price: String,
     content: String,
-    imageId: Number,
-    presentationId: Number,
+    imageId: [Number, String],
+    presentationId: [Number, String, null],
   },
   setup(props) {
-
+ 
+    const numberFormatter = (param) => {
+      if (Number(param)) {
+        return "от" + new Intl.NumberFormat("ru").format(param) + "₽";
+      } else {
+        return param;
+      }
+    };
 
     const itemImage = ref("");
     const itemPresentation = ref("");
@@ -73,8 +70,18 @@ export default {
         "https://staging.getcode.tech/wp-json/wp/v2/media/" + imageId
       );
       let resData = await res.json();
-      link['value'] = resData.source_url;
+      link["value"] = resData.source_url;
     };
+
+    watch(() => props.imageId, (newValue) => {
+      getMedia(newValue, itemImage)
+    })
+
+    watch(() => props.presentationId, (newValue) => {
+      getMedia(newValue, itemPresentation)
+    })
+
+
 
     const objectOpen = ref(false);
     const openObjectInfo = () => {
@@ -94,10 +101,14 @@ export default {
       openObjectInfo,
       closeObjectInfo,
       itemImage,
-      itemPresentation
+      itemPresentation,
+      numberFormatter
     };
   },
 };
 </script>
 <style lang="">
+
+
+
 </style>

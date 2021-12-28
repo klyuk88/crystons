@@ -3,7 +3,6 @@
    <div class="wrapper" id="scroll-container">
      
      <the-header></the-header>
-     <the-mobile-panel></the-mobile-panel>
      <the-intro-section></the-intro-section>
      <the-about></the-about>
      <the-objects></the-objects>
@@ -22,11 +21,10 @@
 
 <script>
 import TheAbout from './components/TheAbout.vue'
-import TheHeader from './components/TheHeader.vue'
+import TheHeader from './components/Header/TheHeader.vue'
 import TheIntroSection from './components/TheIntroSection.vue'
-import TheMobilePanel from './components/TheMobilePanel.vue'
 import TheObjects from './components/TheObjects.vue'
-import TheServices from './components/TheServices.vue'
+import TheServices from './components/Services/TheServices.vue'
 import TheClients from './components/TheClients.vue'
 import TheOwners from './components/TheOwners.vue'
 import TheLocation from './components/TheLocation.vue'
@@ -36,7 +34,6 @@ import TheFooter from './components/TheFooter.vue'
 export default {
   components: {
     TheHeader,
-    TheMobilePanel,
     TheIntroSection,
     TheAbout,
     TheObjects,

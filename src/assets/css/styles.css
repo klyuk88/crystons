@@ -5,7 +5,7 @@
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
-html {
+ html {
   line-height: 1.15;
   /* 1 */
   -webkit-text-size-adjust: 100%;
@@ -595,8 +595,10 @@ button:not([disabled]) {
 }
 
 .select--active .select-btn svg {
-  -webkit-transform: rotate(-90deg);
-  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+}
+
+.select-btn .icon-arrow.rotate {
   transform: rotate(-90deg);
 }
 
@@ -630,12 +632,8 @@ button:not([disabled]) {
   top: -13px;
   left: -13px;
   display: none;
-  -webkit-transform: translateY(20px);
-  -ms-transform: translateY(20px);
   transform: translateY(20px);
   opacity: 0;
-  -webkit-transition: all .2s;
-  -o-transition: all .2s;
   transition: all .2s;
 }
 
@@ -644,8 +642,6 @@ button:not([disabled]) {
 }
 
 .select-dropdown.d-animate {
-  -webkit-transform: translateY(0);
-  -ms-transform: translateY(0);
   transform: translateY(0);
   opacity: 1;
 }
@@ -1074,7 +1070,7 @@ button:not([disabled]) {
 }
 
 .about-img img {
-  max-width: initial;
+  max-width: 100%;
 }
 
 .objects {
@@ -1399,7 +1395,7 @@ button:not([disabled]) {
 .quiz-step__answers {
   margin-bottom: 100px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   column-gap: 70px;
   row-gap: 30px;
   max-width: 482px;
@@ -1414,7 +1410,7 @@ button:not([disabled]) {
 }
 
 .quiz-checkbox__input:checked+.quiz-checkbox__txt::before {
-  background: #F5F5F5 url(../../static/images/general/check.svg) center no-repeat;
+  background: #F5F5F5 url(../images/general/check.svg) center no-repeat;
 }
 
 .quiz-checkbox__txt {
@@ -1995,7 +1991,7 @@ button:not([disabled]) {
   .about {
     padding-top: 70px;
     padding-bottom: 90px;
-    background: url('../../static/images/general/about-bg.png') bottom 10px right 10px no-repeat;
+    background: url(../images/general/about-bg.png) bottom 10px right 10px no-repeat;
   }
 
   .about-small {
@@ -2383,7 +2379,7 @@ button:not([disabled]) {
     overflow-y: scroll;
   }
   
-  .viewport {
+  /* .viewport {
     overflow: hidden;
     position: fixed;
     height: 100%;
@@ -2401,7 +2397,7 @@ button:not([disabled]) {
     z-index: 10;
     backface-visibility: hidden;
     transform-style: preserve-3d;
-  }
+  } */
 }
 
 @media screen and (max-width: 768px){
@@ -2441,6 +2437,10 @@ button:not([disabled]) {
   color: #fff;
   z-index: 10;
   display: none;
+}
+
+.close-project.d-block {
+  display: block;
 }
 
 @media screen and (max-width: 576px){
@@ -2557,11 +2557,113 @@ footer {
   cursor: pointer;
 } */
 
+.objects-controls {
+  margin-top: 30px;
+}
+
+.objects-switch {
+  margin-left: auto;
+}
+
+.objects-controls {
+  justify-content: inherit;
+  
+}
+
+.objects-controls-item {
+  margin-right: 80px;
+}
+
+.objects-controls-btn {
+  background: transparent;
+  color: #18171C;
+  border: 1px solid #18171C;
+  transition: all .2s ease;
+}
+
+.objects-controls-btn:hover {
+  background: #18171C;
+  color: #fff;
+}
+
+
 .objects-controls-filters-wrap {
-  align-items: center;
-  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.objects-parametrs {
+  display: flex;
+}
+
+@media screen and (max-width: 576px){
+  .objects-controls-filters-wrap,.objects-parametrs {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .objects-controls-item {
+    margin-bottom: 15px;
+  }
+  .objects-controls {
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+
+.objects-controls-filters-wrap {
+align-items: center;
 }
 
 .object-card-price {
-  font-size: 25px;
+font-size: 25px;
+}
+
+.vue-map {
+min-height: 500px;
+}
+
+#location-map .vue-map {
+  min-height: 800px;
+}
+
+.objects-card__img {
+width: 100%;
+height: 450px;
+position: relative;
+}
+
+@media screen and (max-width: 576px) {
+.objects-card__img {
+  height: 250px;
+}
+.objects-switch {
+  margin-top: 35px;
+}
+}
+
+.objects-card__img img {
+position: absolute;
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+.service-item__content--active {
+max-height: 1000px;
+}
+
+.quize-form {
+display: flex;
+flex-direction: column;
+width: 100%;
+}
+
+.quize-form-wrap {
+width: 100%;
+grid-template-columns: 1fr;
+}
+
+.quize-form-btn {
+width: 50%;
 }
