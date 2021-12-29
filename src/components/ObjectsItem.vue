@@ -67,7 +67,7 @@ export default {
 
     const getMedia = async (imageId, link) => {
       let res = await fetch(
-        "https://staging.getcode.tech/wp-json/wp/v2/media/" + imageId
+        process.env.VUE_APP_URL + "/wp-json/wp/v2/media/" + imageId
       );
       let resData = await res.json();
       link["value"] = resData.source_url;

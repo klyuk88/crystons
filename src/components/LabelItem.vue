@@ -22,7 +22,7 @@ export default {
     const terms = ref([])
     const getTerms = async () => {
       let res = await fetch(
-        `https://staging.getcode.tech/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`
+        `${process.env.VUE_APP_URL}/wp-json/wp/v2/${props.parentSlug}?hide_empty=true`
       );
       let resData = await res.json();
       terms.value = resData;

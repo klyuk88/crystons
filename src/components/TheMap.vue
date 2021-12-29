@@ -11,7 +11,7 @@
             v-for="(marker, index) in objectsList" :key="index"
             :clickable="true"
             :position="coordinatesToObj(marker.acf.coordinates)"
-            :icon="'https://img.icons8.com/material-rounded/48/000000/marker.png'"
+            :icon="'./marker.svg'"
             @click="openInfoWindow(marker.id)"
             >
               <GMapInfoWindow

@@ -12,17 +12,30 @@
                   :options="options"
                   style="width: 100vw; height: 700px"
               >
-              <GMapMarker
-                :position="center"
-                :clickable="true"
-                :icon="'./marker-logo.svg'"
-              />
+                <GMapMarker
+                  :position="center"
+                  :clickable="true"
+                  :icon="'./marker-logo.svg'"
+                  @click="openInfoWindow(1)"
+                >
+                  <GMapInfoWindow
+                  :closeclick="true"
+                  @closeclick="openInfoWindow(null)"
+                  :opened="openedMarkerID === 1"
+                  >
+                  <div class="location-info">
+                    Пресненская набережная, 6с2,<br>башня «Империя», 3-й подъезд, офис 4315
+                  </div>
+                  
+                  </GMapInfoWindow>
+                </GMapMarker>
               </GMapMap>
           </div>
         </div>
       </div>
 </template>
 <script>
+import { ref } from "vue";
 export default {
   setup(props) {
     const center = { lat: 55.749162, lng: 37.539742 };
@@ -189,11 +202,25 @@ export default {
       ],
     };
 
+    const openedMarkerID = ref(null);
+    const openInfoWindow = (id) => {
+      openedMarkerID.value = id;
+    };
+
     return {
-      center, options
+      center,
+      options,
+      openInfoWindow,
+      openedMarkerID,
     };
   },
 };
 </script>
-<style lang="">
+<style lang="css">
+.location-info {
+  padding: 15px;
+  font-size: 16px;
+  font-family: 'Gilroy';
+  
+}
 </style>

@@ -4,6 +4,7 @@
           <div class="footer-content">
             <p>2021© Все права защищены</p>
             <a href="http://">Политика конфиденциальности</a>
+            <!-- <p class="dev-label">Разработка сайта Getode</p> -->
           </div>
 
         </div>
@@ -14,6 +15,8 @@ export default {
     
 }
 </script>
-<style lang="">
-    
+<style lang="css">
+    .dev-label {
+      margin-left: auto;
+    }
 </style>

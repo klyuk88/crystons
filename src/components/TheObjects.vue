@@ -6,19 +6,14 @@
         <div class="row">
           <div class="col-3">
             <!-- Search objects begin -->
-            <button
-              class="objects-search__btn"
-              type="submit"
-              aria-label="search"
-              @click="searchHeandler"
-            >
+            <div class="objects-search">
               <img
+              class="objects-search__btn"
                 src="../assets/images/general/search.svg"
                 width="36"
                 height="36"
                 alt=""
               />
-            </button>
             <input
               class="objects-search__input"
               type="text"
@@ -26,6 +21,13 @@
               v-model.trim.lazy="searchInput"
               @keyup.enter="searchHeandler"
             />
+            <button
+            class="search-btn"
+            @click="searchHeandler"
+            >Найти</button>
+
+            </div>
+         
             <!-- Search objects end -->
           </div>
           <div class="col-3">
@@ -196,7 +198,7 @@ export default {
 
     const getTerms = async (value) => {
       let res = await fetch(
-        "https://staging.getcode.tech/wp-json/wp/v2/taxonomies?type=" + value
+        process.env.VUE_APP_URL + "/wp-json/wp/v2/taxonomies?type=" + value
       );
       if (res.ok) {
         let resData = await res.json();
@@ -205,7 +207,7 @@ export default {
     };
 
     const getTypes = async () => {
-      let res = await fetch("https://staging.getcode.tech/wp-json/wp/v2/types");
+      let res = await fetch(process.env.VUE_APP_URL + "/wp-json/wp/v2/types");
       if (res.ok) {
         let resData = await res.json();
         data.types = Object.values(resData);
@@ -227,7 +229,7 @@ export default {
       params: {},
     });
     const createUrl = () => {
-      let url = `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`;
+      let url = `${process.env.VUE_APP_URL}/wp-json/wp/v2/${typeEstate.value}`;
       const paramsArr = [];
       for (const [key, value] of Object.entries(paramsItems.params)) {
         if (value.length) {
@@ -256,7 +258,7 @@ export default {
     watch(typeEstate, (newVal) => {
       getTerms(newVal);
       objectsListUrl.value =
-        "https://staging.getcode.tech/wp-json/wp/v2/" + newVal;
+        process.env.VUE_APP_URL + "/wp-json/wp/v2/" + newVal;
       searchInput.value = "";
       searchObjectsList.value = [];
       notSearchResult.value = false
@@ -297,7 +299,7 @@ export default {
       getTypes();
       getTerms("live_object");
       getData(
-        `https://staging.getcode.tech/wp-json/wp/v2/${typeEstate.value}`,
+        process.env.VUE_APP_URL + `/wp-json/wp/v2/${typeEstate.value}`,
         objectsList
       );
     });
@@ -336,6 +338,16 @@ export default {
   text-align: center;
   text-transform: uppercase;
   font-weight: 400;
+}
+.search-btn {
+  border: none;
+  position: absolute;
+  right: 0;
+  transform: translateX(-80%);
+  font-size: 18px;
+  font-family: 'Gilroy';
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
 

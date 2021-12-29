@@ -6,7 +6,7 @@
           <div class="quiz">
 
             <div class="quiz-steps">
-            <form action="#" method="POST" @submit.prevent="submitForm">
+            <form @submit.prevent="submitForm">
 
               <div
               class="quiz-step"
@@ -101,11 +101,11 @@
                <div class="quiz-step"
                :class="{'d-block': steps[3].active, 'd-animate': steps[3].active}"
                >
-                <div class="quiz-step__title">Получите персональную подборку объектов</div>
+                <div class="quiz-step__title">{{sendTitle}}</div>
                 <div class="quiz-step__answers quize-form-wrap">
-                  <div class="quize-form">
-                    <input class="contacts-form__input" name="Имя" type="text" placeholder="Имя" v-model="formInputs.name">
-                    <input class="contacts-form__input" name="Телефон" type="tel" placeholder="Телефон" v-model="formInputs.phone">
+                  <div class="quize-form" v-if="!sendOk">
+                    <input class="contacts-form__input" name="Имя" type="text" placeholder="Имя" v-model="formInputs.name" required>
+                    <input class="contacts-form__input" name="Телефон" type="tel" placeholder="Телефон" v-model="formInputs.phone" required>
 
                     <button class="contacts-form__btn btn quize-form-btn" type="submit">Отправить завяку</button>
                   </div>
@@ -118,7 +118,7 @@
             </div>
 
 
-            <div class="quiz-controls">
+            <div class="quiz-controls" v-if="!sendOk">
 
               <button
               v-if="currentStep > 1"
@@ -144,7 +144,7 @@
 
             </div>
 
-            <div class="quiz-progress">
+            <div class="quiz-progress" v-if="!sendOk">
               <div
               class="quiz-progress__line"> <span :style="{width: quizProgress + '%'}"></span></div>
               <div class="quiz-progress__count"><span>{{quizProgress}}</span>%</div>
@@ -156,6 +156,7 @@
 </template>
 <script>
 import { ref, reactive, watch, computed } from "vue";
+import { serialize } from "object-to-formdata";
 export default {
   setup(props) {
     const activeQuizItem = ref(true);
@@ -209,19 +210,39 @@ export default {
 
     watch(formInputs, () => {
       setTimeout(() => {
-        nextSlideHeandler()
+        nextSlideHeandler();
       }, 300);
-      
-    })
-
+    });
 
     const quizProgress = computed(() => {
       return (100 / steps.value.length) * currentStep.value;
     });
 
     const submitForm = () => {
-      console.log(formInputs);
-    }
+      fakeSend()
+      // let formData = serialize(formInputs);
+      // fetch(`${process.env.VUE_APP_URL}/send.php`, {
+      //   method: "POST",
+      //   body: formData,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //     console.log("ok");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //     console.log("fuck");
+      //   })
+      //   .finally(() => {});
+    };
+
+    const sendTitle = ref("Получите персональную подборку объектов");
+    const sendOk = ref(false)
+    const fakeSend = () => {
+      sendTitle.value =
+        "Спасибо за обращение, в ближайшее время мы с вами свяжемся";
+      sendOk.value = true
+    };
 
     return {
       activeQuizItem,
@@ -232,6 +253,8 @@ export default {
       formInputs,
       submitForm,
       quizProgress,
+      sendTitle,
+      sendOk,
     };
   },
 };
