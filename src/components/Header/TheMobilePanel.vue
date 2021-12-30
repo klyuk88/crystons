@@ -26,10 +26,10 @@
       <div class="mobile-panel__links">
         <a
           class="mobile-panel__links-item mobile-panel__links-mail"
-          href="mailto:crystos@gmail.com"
-          >crystos@gmail.com</a
-        ><a class="mobile-panel__links-item" href="tel:+79035041838"
-          >+7 (903) 504-18-38
+          href="mailto:site@crystons.ru"
+          >site@crystons.ru</a
+        ><a class="mobile-panel__links-item" href="tel:+74957955537"
+          >+7 (495) 795 55 37
         </a>
       </div>
     </div>

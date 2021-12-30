@@ -2,21 +2,27 @@
          <footer>
         <div class="container">
           <div class="footer-content">
-            <p>2021© Все права защищены</p>
+            <div>
+            <p>2022© Все права защищены</p>
             <a href="http://">Политика конфиденциальности</a>
-            <!-- <p class="dev-label">Разработка сайта Getode</p> -->
+            </div>
+            
+            <p class="dev-label">Разработка сайта <a href="mailto:hello@getcode.tech">Getcode</a></p>
           </div>
 
         </div>
       </footer>
 </template>
 <script>
-export default {
-    
-}
+export default {};
 </script>
 <style lang="css">
-    .dev-label {
-      margin-left: auto;
-    }
+.dev-label {
+  font-size: 12px;
+}
+.footer-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 </style>

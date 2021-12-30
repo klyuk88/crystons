@@ -24,7 +24,8 @@
                   :opened="openedMarkerID === 1"
                   >
                   <div class="location-info">
-                    Пресненская набережная, 6с2,<br>башня «Империя», 3-й подъезд, офис 4315
+                    Москва г, ул. Воздвиженка, д. 10<br>
+                    <a href="tel:+74957955537">+7 (495) 795 55 37</a>
                   </div>
                   
                   </GMapInfoWindow>
@@ -38,7 +39,7 @@
 import { ref } from "vue";
 export default {
   setup(props) {
-    const center = { lat: 55.749162, lng: 37.539742 };
+    const center = { lat: 55.753301, lng: 37.606272 };
     const options = {
       styles: [
         {

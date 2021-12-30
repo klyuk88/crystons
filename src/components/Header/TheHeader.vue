@@ -3,7 +3,7 @@
         <div class="container">
           <div class="header__row row">
             <div class="header__col">
-              <div class="header-year header-txt">2021</div>
+              <div class="header-year header-txt">2022</div>
               <ul class="menu">
                 <menu-item title="О компании" anchor="#about"></menu-item>
                 <menu-item title="Объекты" anchor="#objects"></menu-item>

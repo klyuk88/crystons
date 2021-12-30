@@ -1,44 +1,52 @@
 <?php
-require( dirname(__FILE__) . '/wp-load.php');
+
+$method = $_SERVER['REQUEST_METHOD'];
+
+//Script Foreach
 $c = true;
-$admin_email = get_option('admin_email');
+if ( $method === 'POST' ) {
 
-	if ( ! function_exists( 'wp_handle_upload' ) )
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );     
+	$project_name = 'CRYSTONS';
+	$admin_email  = 'sc@crystons.ru';
+	$form_subject = 'Заявка с сайта CRYSTONS';
 
-	$file = & $_FILES['user_file'];
-	$overrides = [ 'test_form' => false ];
-	$movefile = wp_handle_upload( $file, $overrides );
-  $attachments = '';
-
-	if ( $movefile && empty($movefile['error']) ) {
-    $attachments = $movefile['file'];
+	foreach ( $_POST as $key => $value ) {
+		if ( $value != "" && $key != "project_name" && $key != "admin_email" && $key != "form_subject" ) {
+			$message .= "
+			" . ( ($c = !$c) ? '<tr>':'<tr style="background-color: #f8f8f8;">' ) . "
+				<td style='padding: 10px; border: #e9e9e9 1px solid;'><b>$key</b></td>
+				<td style='padding: 10px; border: #e9e9e9 1px solid;'>$value</td>
+			</tr>
+			";
+		}
 	}
+} else if ( $method === 'GET' ) {
 
-foreach ( $_POST as $key => $value ) {
+	$project_name = 'CRYSTONS';
+	$admin_email  = 'klyukovskiy@yandex.ru';
+	$form_subject = 'Заявка с сайта';
 
-  if(is_array($value)) {
-    $value = implode(",", $value);
-  }
-    $message .= "
-    " . ( ($c = !$c) ? '<tr>':'<tr style="background-color: #f8f8f8;">' ) . "
-      <td style='padding: 10px; border: #e9e9e9 1px solid;'><b>$key</b></td>
-      <td style='padding: 10px; border: #e9e9e9 1px solid;'>$value</td>
-    </tr>
-    ";
-  }
-
+	foreach ( $_GET as $key => $value ) {
+		if ( $value != "" && $key != "project_name" && $key != "admin_email" && $key != "form_subject" ) {
+			$message .= "
+			" . ( ($c = !$c) ? '<tr>':'<tr style="background-color: #f8f8f8;">' ) . "
+				<td style='padding: 10px; border: #e9e9e9 1px solid;'><b>$key</b></td>
+				<td style='padding: 10px; border: #e9e9e9 1px solid;'>$value</td>
+			</tr>
+			";
+		}
+	}
+}
 
 $message = "<table style='width: 100%;'>$message</table>";
 
-$headers = array(
-    "Content-type: text/html; charset=utf-8",
-    "From: CRYSTONS <".$admin_email.">"
-      );
+function adopt($text) {
+	return '=?UTF-8?B?'.Base64_encode($text).'?=';
+}
 
-          
-wp_mail( $admin_email, 'mail from CRYSTONS', $message, $headers, $attachments);
+$headers = "MIME-Version: 1.0" . PHP_EOL .
+"Content-Type: text/html; charset=utf-8" . PHP_EOL .
+'From: '.adopt($project_name).' <'.$admin_email.'>' . PHP_EOL .
+'Reply-To: '.$admin_email.'' . PHP_EOL;
 
-exit;
-
-?>
+mail($admin_email, adopt($form_subject), $message, $headers );

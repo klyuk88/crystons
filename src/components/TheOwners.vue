@@ -89,7 +89,11 @@
                       <div class="owners-item__txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ultrices
                         dignissim lorem cursus commodo sit nunc. Dictumst purus eu odio risus, sollicitudin risus cras
                         id. Odio egestas convallis tortor nec lorem diam morbi convallis. Est tellus ultrices sed
-                        sagittis</div><a class="btn owners-item__btn" href="#">Хочу продать </a>
+                        sagittis</div><a
+                        class="btn owners-item__btn"
+                        href="#"
+                        @click.prevent="wantSaleHeandler"
+                        >Хочу продать </a>
                     </div>
                   </div>
                 </div>
@@ -103,6 +107,7 @@
 import { onMounted, ref } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 export default {
   setup(props) {
     const trigger = ref(null);
@@ -127,7 +132,7 @@ export default {
       tl2.to(
         imageTwo.value,
         {
-          yPercent: -50,
+          yPercent: -30,
           ease: "none",
         },
         "<"
@@ -143,7 +148,7 @@ export default {
       tl2.to(
         imageFour.value,
         {
-          yPercent: -80,
+          yPercent: -30,
           ease: "none",
         },
         "<"
@@ -152,8 +157,17 @@ export default {
 
     onMounted(() => {
       gsap.registerPlugin(ScrollTrigger);
+      gsap.registerPlugin(ScrollToPlugin);
       parallaxImages();
     });
+
+    const wantSaleHeandler = () => {
+       gsap.to(window, {
+        duration: 1,
+        scrollTo: '#contacts',
+        ease: "power2",
+      });
+    }
 
     return {
       trigger,
@@ -161,6 +175,7 @@ export default {
       imageTwo,
       imageThree,
       imageFour,
+      wantSaleHeandler
     };
   },
 };

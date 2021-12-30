@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@fawmi/vue-google-maps": "^0.9.4",
-    "core-js": "^3.6.5",
     "gsap": "^3.9.1",
+    "maska": "^1.5.0",
     "object-to-formdata": "^4.4.1",
     "vue": "^3.0.0"
   },

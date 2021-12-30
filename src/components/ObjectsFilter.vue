@@ -5,7 +5,7 @@
                     objects-filter objects-controls-item
                   "
                 >
-                  <div class="select">
+                  <!-- <div class="select"> -->
                     <div class="select-btn" @click="openList">
                       <div class="select-btn__txt">{{parentName}}</div>
                       <svg
@@ -39,7 +39,7 @@
                       </div>
                     </div>
                     <!-- select-dropdown end -->
-                  </div>
+                  <!-- </div> -->
                 </div>
 </template>
 <script>
@@ -102,7 +102,8 @@ export default {
   },
 };
 </script>
-<style lang="">
+<style>
+
 </style>
 
 

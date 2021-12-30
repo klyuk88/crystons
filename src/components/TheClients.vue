@@ -105,7 +105,7 @@
                 <div class="quiz-step__answers quize-form-wrap">
                   <div class="quize-form" v-if="!sendOk">
                     <input class="contacts-form__input" name="Имя" type="text" placeholder="Имя" v-model="formInputs.name" required>
-                    <input class="contacts-form__input" name="Телефон" type="tel" placeholder="Телефон" v-model="formInputs.phone" required>
+                    <input class="contacts-form__input" name="Телефон" type="tel" placeholder="Телефон" v-model="formInputs.phone" required v-maska="['+7 (###) ##-##-##', '+7 (###) ###-##-##']">
 
                     <button class="contacts-form__btn btn quize-form-btn" type="submit">Отправить завяку</button>
                   </div>
@@ -219,21 +219,18 @@ export default {
     });
 
     const submitForm = () => {
-      fakeSend()
-      // let formData = serialize(formInputs);
-      // fetch(`${process.env.VUE_APP_URL}/send.php`, {
-      //   method: "POST",
-      //   body: formData,
-      // })
-      //   .then((res) => {
-      //     console.log(res);
-      //     console.log("ok");
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     console.log("fuck");
-      //   })
-      //   .finally(() => {});
+      
+      let formData = serialize(formInputs);
+      fetch(`/send.php`, {
+        method: "POST",
+        body: formData,
+      })
+        .then((res) => {
+          fakeSend()
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     };
 
     const sendTitle = ref("Получите персональную подборку объектов");

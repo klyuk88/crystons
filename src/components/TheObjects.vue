@@ -17,7 +17,7 @@
             <input
               class="objects-search__input"
               type="text"
-              placeholder="Hазвание, район, адрес, метро"
+              placeholder="Hазвание, адрес"
               v-model.trim.lazy="searchInput"
               @keyup.enter="searchHeandler"
             />
@@ -274,7 +274,7 @@ export default {
     const searchObjectsList = ref([]);
     const notSearchResult = ref(false)
     const searchHeandler = () => {
-      if (searchInput !== "") {
+      if (searchInput.value.length > 0) {
         searchObjectsList.value = objectsList.value.filter((item) => {
           const regexp = new RegExp(`${searchInput.value}`, "i");
           const adressSearch = item.acf.adress.match(regexp) || [];
@@ -348,6 +348,11 @@ export default {
   font-family: 'Gilroy';
   top: 50%;
   transform: translateY(-50%);
+}
+@media screen and (max-width: 576px) {
+  .search-btn {
+    font-size: 14px;
+  }
 }
 </style>
 
