@@ -8,26 +8,22 @@
             <!-- Search objects begin -->
             <div class="objects-search">
               <img
-              class="objects-search__btn"
+                class="objects-search__btn"
                 src="../assets/images/general/search.svg"
                 width="36"
                 height="36"
                 alt=""
               />
-            <input
-              class="objects-search__input"
-              type="text"
-              placeholder="Hазвание, адрес"
-              v-model.trim.lazy="searchInput"
-              @keyup.enter="searchHeandler"
-            />
-            <button
-            class="search-btn"
-            @click="searchHeandler"
-            >Найти</button>
-
+              <input
+                class="objects-search__input"
+                type="text"
+                placeholder="Hазвание, адрес"
+                v-model.trim.lazy="searchInput"
+                @keyup.enter="searchHeandler"
+              />
+              <button class="search-btn" @click="searchHeandler">Найти</button>
             </div>
-         
+
             <!-- Search objects end -->
           </div>
           <div class="col-3">
@@ -68,48 +64,45 @@
                     objects-filter objects-controls-item
                   "
                 >
-                  <div class="select">
-                    <div class="select-btn" @click="openList">
-                      <div class="select-btn__txt">Тип недвижимости</div>
-                      <svg
-                        class="svg-sprite-icon icon-arrow"
-                        :class="{ rotate: isOpen }"
-                      >
-                        <use
-                          xlink:href="../assets/images/svg/symbol/sprite.svg#arrow"
-                        ></use>
-                      </svg>
-                    </div>
-
-                    <div
-                      class="select-dropdown"
-                      :class="{ 'd-block': isOpen, 'd-animate': isAnim }"
+                  <div class="select-btn" @click="openList">
+                    <svg
+                      class="svg-sprite-icon icon-arrow"
                     >
-                      <div class="select-dropdown__content">
-                        <div class="select-dropdown__list render-list">
-                          <label
-                            class="select-dropdown__label"
-                            v-for="(item, index) in data.types"
-                            :key="index"
-                          >
-                            <input
-                              class="select-dropdown__label-input"
-                              type="radio"
-                              name="Тип недвижимости"
-                              :value="item.slug"
-                              v-model="typeEstate"
-                              :checked="
-                                item.slug === 'live_object' ? true : false
-                              "
-                            /><span class="select-dropdown__label-txt">{{
-                              item.name
-                            }}</span>
-                          </label>
-                        </div>
+                      <use
+                        xlink:href="../assets/images/svg/symbol/sprite.svg#arrow"
+                      ></use>
+                    </svg>
+                    <div class="select-btn__txt">Тип недвижимости</div>
+                  </div>
+
+                  <div
+                    class="select-dropdown"
+                    :class="{ 'd-block': isOpen, 'd-animate': isAnim }"
+                  >
+                    <div class="select-dropdown__content">
+                      <div class="select-dropdown__list render-list">
+                        <label
+                          class="select-dropdown__label"
+                          v-for="(item, index) in data.types"
+                          :key="index"
+                        >
+                          <input
+                            class="select-dropdown__label-input"
+                            type="radio"
+                            name="Тип недвижимости"
+                            :value="item.slug"
+                            v-model="typeEstate"
+                            :checked="
+                              item.slug === 'live_object' ? true : false
+                            "
+                          /><span class="select-dropdown__label-txt">{{
+                            item.name
+                          }}</span>
+                        </label>
                       </div>
                     </div>
-                    <!-- select-dropdown end -->
                   </div>
+                  <!-- select-dropdown end -->
                 </div>
 
                 <!-- Filter type end  -->
@@ -135,10 +128,15 @@
             </div>
           </div>
         </div>
-        <h2 class="not-found-search-title" v-if="searchObjectsList.length === 0 && notSearchResult">По вашему запросу ничего не найдено</h2>
+        <h2
+          class="not-found-search-title"
+          v-if="searchObjectsList.length === 0 && notSearchResult"
+        >
+          По вашему запросу ничего не найдено
+        </h2>
         <template v-else>
           <objects-list
-          :objects-list-url="objectsListUrl"
+            :objects-list-url="objectsListUrl"
             :active="isSwitched"
             :objects-list="
               searchObjectsList.length ? searchObjectsList : objectsList
@@ -152,7 +150,6 @@
             "
           ></the-map>
         </template>
-       
       </div>
     </div>
   </div>
@@ -261,7 +258,7 @@ export default {
         process.env.VUE_APP_URL + "/wp-json/wp/v2/" + newVal;
       searchInput.value = "";
       searchObjectsList.value = [];
-      notSearchResult.value = false
+      notSearchResult.value = false;
     });
 
     watch(objectsListUrl, (newVal) => {
@@ -272,7 +269,7 @@ export default {
 
     const searchInput = ref(null);
     const searchObjectsList = ref([]);
-    const notSearchResult = ref(false)
+    const notSearchResult = ref(false);
     const searchHeandler = () => {
       if (searchInput.value.length > 0) {
         searchObjectsList.value = objectsList.value.filter((item) => {
@@ -283,17 +280,20 @@ export default {
             return true;
           }
         });
-        if(searchObjectsList.value.length === 0) {
-          notSearchResult.value = true
+        if (searchObjectsList.value.length === 0) {
+          notSearchResult.value = true;
         } else {
-          notSearchResult.value = false
+          notSearchResult.value = false;
         }
-        
       } else {
         searchObjectsList.value = [];
-        notSearchResult.value = false
+        notSearchResult.value = false;
       }
     };
+
+
+    const allClose = ref(true)
+    
 
     onMounted(() => {
       getTypes();
@@ -303,6 +303,7 @@ export default {
         objectsList
       );
     });
+ 
 
     return {
       data,
@@ -320,7 +321,7 @@ export default {
       objectsList,
       searchObjectsList,
       notSearchResult,
-      objectsListUrl
+      objectsListUrl,
     };
   },
 };
@@ -333,7 +334,7 @@ export default {
 }
 .not-found-search-title {
   font-size: 30px;
-  font-family: 'TT Tsars A';
+  font-family: "TT Tsars A";
   padding: 50px 0;
   text-align: center;
   text-transform: uppercase;
@@ -345,7 +346,7 @@ export default {
   right: 0;
   transform: translateX(-80%);
   font-size: 18px;
-  font-family: 'Gilroy';
+  font-family: "Gilroy";
   top: 50%;
   transform: translateY(-50%);
 }

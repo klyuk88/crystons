@@ -131,7 +131,7 @@
                 </svg>
               </button>
 
-              <button
+              <!-- <button
               v-if="currentStep !== steps.length"
               class="quiz-btn quiz-btn--next"
               type="button"
@@ -140,7 +140,7 @@
                 <svg class="svg-sprite-icon icon-next">
                   <use xlink:href="../assets/images/svg/symbol/sprite.svg#next"></use>
                 </svg>
-              </button>
+              </button> -->
 
             </div>
 

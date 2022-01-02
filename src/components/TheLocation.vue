@@ -8,14 +8,16 @@
           <div id="location-map">
              <GMapMap
                   :center="center"
-                  :zoom="15"
+                  :zoom="17"
                   :options="options"
                   style="width: 100vw; height: 700px"
               >
                 <GMapMarker
                   :position="center"
                   :clickable="true"
-                  :icon="'./marker-logo.svg'"
+                  :icon="{
+                    url: './marker-logo.svg'
+                  }"
                   @click="openInfoWindow(1)"
                 >
                   <GMapInfoWindow
@@ -39,7 +41,7 @@
 import { ref } from "vue";
 export default {
   setup(props) {
-    const center = { lat: 55.753301, lng: 37.606272 };
+    const center = { lat: 55.75324781461261, lng: 37.606249211877525 };
     const options = {
       styles: [
         {
@@ -221,7 +223,6 @@ export default {
 .location-info {
   padding: 15px;
   font-size: 16px;
-  font-family: 'Gilroy';
-  
+  font-family: "Gilroy";
 }
 </style>

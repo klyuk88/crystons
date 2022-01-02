@@ -2608,23 +2608,6 @@ footer {
   display: flex;
 }
 
-@media screen and (max-width: 576px) {
-
-  .objects-controls-filters-wrap,
-  .objects-parametrs {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .objects-controls-item {
-    margin-bottom: 15px;
-  }
-
-  .objects-controls {
-    justify-content: space-between;
-    align-items: flex-start;
-  }
-}
 
 
 .objects-controls-filters-wrap {
@@ -2689,3 +2672,28 @@ footer {
   width: 50%;
 }
 
+.select-btn svg {
+  margin: 0;
+  margin-right: 6px;
+}
+
+
+
+
+@media screen and (max-width: 576px) {
+
+  .objects-controls-filters-wrap,
+  .objects-parametrs {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .objects-controls-item {
+    margin-bottom: 15px;
+  }
+
+  .objects-controls {
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
