@@ -16,13 +16,13 @@
                 <div class="quiz-step__answers">
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Цель покупки" value="Для проживания" v-model="formInputs.buyTarget"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Цель покупки" value="Для проживания" v-model="formInputs.buyTarget"><span
                         class="quiz-checkbox__txt" >Для проживания</span>
                     </label>
                   </div>
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Цель покупки" value="Для инвестиций" v-model="formInputs.buyTarget"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Цель покупки" value="Для инвестиций" v-model="formInputs.buyTarget"><span
                         class="quiz-checkbox__txt">Для инвестиций</span>
                     </label>
                   </div>
@@ -36,25 +36,25 @@
                 <div class="quiz-step__answers">
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Тип недвижимости" value="Жилая" v-model="formInputs.typeEstate"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Тип недвижимости" value="Жилая" v-model="formInputs.typeEstate"><span
                         class="quiz-checkbox__txt">Жилая</span>
                     </label>
                   </div>
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Тип недвижимости" value="Торговая" v-model="formInputs.typeEstate"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Тип недвижимости" value="Торговая" v-model="formInputs.typeEstate"><span
                         class="quiz-checkbox__txt">Торговая</span>
                     </label>
                   </div>
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Тип недвижимости" value="Офисная" v-model="formInputs.typeEstate"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Тип недвижимости" value="Офисная" v-model="formInputs.typeEstate"><span
                         class="quiz-checkbox__txt">Офисная</span>
                     </label>
                   </div>
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Тип недвижимости" value="Земельные участки" v-model="formInputs.typeEstate"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Тип недвижимости" value="Земельные участки" v-model="formInputs.typeEstate"><span
                         class="quiz-checkbox__txt">Земельные участки</span>
                     </label>
                   </div>
@@ -69,28 +69,28 @@
 
                   <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Площадь" value="50 - 100 кв.м." v-model="formInputs.square"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Площадь" value="50 - 100 кв.м." v-model="formInputs.square"><span
                         class="quiz-checkbox__txt">50 - 100 кв.м.</span>
                     </label>
                   </div>
 
                    <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Площадь" value="100 -150 кв.м." v-model="formInputs.square"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Площадь" value="100 -150 кв.м." v-model="formInputs.square"><span
                         class="quiz-checkbox__txt">100 -150 кв.м.</span>
                     </label>
                   </div>
 
                    <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Площадь" value="150 – 200 кв.м." v-model="formInputs.square"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Площадь" value="150 – 200 кв.м." v-model="formInputs.square"><span
                         class="quiz-checkbox__txt">150 – 200 кв.м.</span>
                     </label>
                   </div>
 
                    <div class="quiz-step__answers-item">
                     <label class="quiz-checkbox">
-                      <input class="quiz-checkbox__input" type="radio" name="Площадь" value="Более 200 кв.м." v-model="formInputs.square"><span
+                      <input class="quiz-checkbox__input" type="checkbox" name="Площадь" value="Более 200 кв.м." v-model="formInputs.square"><span
                         class="quiz-checkbox__txt">Более 200 кв.м.</span>
                     </label>
                   </div>
@@ -131,16 +131,18 @@
                 </svg>
               </button>
 
-              <!-- <button
+              <button
+              :disabled="isDisabled"
               v-if="currentStep !== steps.length"
               class="quiz-btn quiz-btn--next"
+              :class="{'disabled': isDisabled}"
               type="button"
               @click="nextSlideHeandler"
               >Следлующий шаг
                 <svg class="svg-sprite-icon icon-next">
                   <use xlink:href="../assets/images/svg/symbol/sprite.svg#next"></use>
                 </svg>
-              </button> -->
+              </button>
 
             </div>
 
@@ -190,35 +192,56 @@ export default {
 
     const nextSlideHeandler = () => {
       if (currentStep.value !== steps.value.length) {
+        isDisabled.value = true
         currentStep.value++;
         changeStep();
+        
       }
     };
     const prevSlideHeandler = () => {
       if (currentStep.value >= 1) {
+        isDisabled.value = false
         currentStep.value--;
         changeStep();
       }
     };
     const formInputs = reactive({
-      buyTarget: null,
-      typeEstate: null,
-      square: null,
+      buyTarget: [],
+      typeEstate: [],
+      square: [],
       name: null,
       phone: null,
     });
 
-    watch(formInputs, () => {
-      setTimeout(() => {
-        nextSlideHeandler();
-      }, 300);
-    });
+    
+    const isDisabled = ref(true)
+    const changeDisabled = (input) => {
+        if(input.length > 0) {
+          isDisabled.value = false
+        } else {
+          isDisabled.value = true
+        }
+    }
+
+    watch(() => formInputs.buyTarget, (newVal) => {
+        changeDisabled(newVal)
+    })
+    watch(() => formInputs.typeEstate, (newVal) => {
+        changeDisabled(newVal)
+    })
+    watch(() => formInputs.square, (newVal) => {
+        changeDisabled(newVal)
+    })
+   
 
     const quizProgress = computed(() => {
       return (100 / steps.value.length) * currentStep.value;
     });
 
     const submitForm = () => {
+      for (const key in formInputs) {
+        Array.isArray(formInputs[key]) ? formInputs[key] = formInputs[key].join(',') : formInputs[key] = formInputs[key]
+      }
       
       let formData = serialize(formInputs);
       fetch(`/send.php`, {
@@ -252,9 +275,15 @@ export default {
       quizProgress,
       sendTitle,
       sendOk,
+      isDisabled
     };
   },
 };
 </script>
-<style lang="">
+<style lang="sass">
+.disabled
+  opacity: 0.4
+.disabled:hover
+  background: none
+  color: #fff
 </style>

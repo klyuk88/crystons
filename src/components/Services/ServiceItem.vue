@@ -16,10 +16,8 @@
                 class="service-item__content"
                 :class="{'service-item__content--active': openServiceItem}"
                 >
-                  <div class="service-item__content-inner">
-                      <p>
-                        {{content}}
-                      </p>
+                  <div class="service-item__content-inner" ref="contentText">
+                      
                     
                   </div>
                 </div>
@@ -27,21 +25,32 @@
             </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 export default {
   props: {
     title: String,
     content: String,
   },
   setup(props) {
+    const contentText = ref(null)
     const openServiceItem = ref(false);
     const serviceItemHeandler = () => {
       openServiceItem.value = !openServiceItem.value;
     };
 
+    const innerText = () => {
+      contentText.value.innerHTML = props.content
+    }
+
+    onMounted(() => {
+      innerText()
+    })
+
     return {
       openServiceItem,
       serviceItemHeandler,
+      contentText
+      
     };
   },
 };

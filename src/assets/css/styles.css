@@ -1016,7 +1016,7 @@ button:not([disabled]) {
 .intro-gallery {
   min-height: 1507px;
   position: relative;
-  margin-top: -38px;
+  margin-top: 50px;
   z-index: -1;
 }
 
@@ -1036,7 +1036,8 @@ button:not([disabled]) {
 
 .intro-gallery__img--2 {
   bottom: 434px;
-  left: -80px;
+  left: 0;
+  width: 550px;
 }
 
 .intro-gallery__img--3 {

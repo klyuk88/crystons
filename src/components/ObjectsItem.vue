@@ -56,7 +56,7 @@ export default {
  
     const numberFormatter = (param) => {
       if (Number(param)) {
-        return "от" + new Intl.NumberFormat("ru").format(param) + "₽";
+        return "от " + new Intl.NumberFormat("ru").format(param) + "₽";
       } else {
         return param;
       }
