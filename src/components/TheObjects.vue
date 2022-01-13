@@ -67,12 +67,13 @@
                   <div class="select-btn" @click="openList">
                     <svg
                       class="svg-sprite-icon icon-arrow"
+                      :class="{ 'rotate': isOpen }"
                     >
                       <use
                         xlink:href="../assets/images/svg/symbol/sprite.svg#arrow"
                       ></use>
                     </svg>
-                    <div class="select-btn__txt">Тип недвижимости</div>
+                    <div class="select-btn__txt">{{isOpen ? 'Закрыть' : 'Тип недвижимости'}}</div>
                   </div>
 
                   <div
@@ -141,6 +142,7 @@
             :objects-list="
               searchObjectsList.length ? searchObjectsList : objectsList
             "
+            @openPop="openPopup"
           ></objects-list>
 
           <the-map
@@ -148,11 +150,18 @@
             :objects-list="
               searchObjectsList.length ? searchObjectsList : objectsList
             "
+            @openPopMap="openPopup"
+
           ></the-map>
         </template>
       </div>
     </div>
   </div>
+  <PopUP
+    v-if="isVisible"
+    @closePopup="closePopup"
+    title="Для получения презентации по данному объекту, заполните форму"
+  />
 </template>
 
 <script>
@@ -160,14 +169,23 @@ import { ref, onMounted, reactive, watch } from "vue";
 import ObjectsFilter from "./ObjectsFilter.vue";
 import TheMap from "./TheMap.vue";
 import ObjectsList from "./ObjectsList.vue";
+import PopUP from './PopUP.vue';
 
 export default {
-  components: { TheMap, ObjectsFilter, ObjectsList },
+  components: { TheMap, ObjectsFilter, ObjectsList, PopUP },
   setup() {
     const data = reactive({
       types: [],
       typesTerms: [],
     });
+
+    const isVisible = ref(false)
+    const closePopup = () => {
+      isVisible.value = false
+    }
+    const openPopup = () => {
+      isVisible.value = true
+    }
 
     const isSwitched = ref(false);
     const switchHeandler = (event) => {
@@ -322,6 +340,9 @@ export default {
       searchObjectsList,
       notSearchResult,
       objectsListUrl,
+      isVisible,
+      openPopup,
+      closePopup
     };
   },
 };

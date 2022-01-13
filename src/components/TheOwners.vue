@@ -28,10 +28,7 @@
                     <div class="owners-item__content owners-item__content--1">
                       <div class="owners-item__number">01</div>
                       <div class="owners-item__title">МЫ ДОРОЖИМ<br> ВАШЕМ ВРЕМЕНЕМ</div>
-                      <div class="owners-item__txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ultrices
-                        dignissim lorem cursus commodo sit nunc. Dictumst purus eu odio risus, sollicitudin risus cras
-                        id. Odio egestas convallis tortor nec lorem diam morbi convallis. Est tellus ultrices sed
-                        sagittis </div>
+                      <div class="owners-item__txt">Время – бесценный, невосполнимый ресурс человека, но его можно сэкономить благодаря делегированию полномочий. Мы умеем эффективно им распоряжаться, достаточно просто поставить нам задачу.</div>
                     </div>
                   </div>
                 </div>
@@ -44,10 +41,8 @@
                     <div class="owners-item__content owners-item__content--2">
                       <div class="owners-item__number">02</div>
                       <div class="owners-item__title">С НАМИ МОЖНО <br>ЖИТЬ УВЕРЕННО</div>
-                      <div class="owners-item__txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ultrices
-                        dignissim lorem cursus commodo sit nunc. Dictumst purus eu odio risus, sollicitudin risus cras
-                        id. Odio egestas convallis tortor nec lorem diam morbi convallis. Est tellus ultrices sed
-                        sagittis </div>
+                      <div class="owners-item__txt">Мы способны быстро решать сложные вопросы и добиваться поставленных целей методами, достойными доверия. Наши ключевые компетенции — это профессионализм, надежность и обязательность.
+                      </div>
                     </div>
                   </div>
                   <div class="col-3 owners-item__col-img">
@@ -86,10 +81,8 @@
                     <div class="owners-item__content owners-item__content--3">
                       <div class="owners-item__number">03</div>
                       <div class="owners-item__title">ВАША НЕДВИЖИМОСТЬ–<br>ВАШ ДОХОД</div>
-                      <div class="owners-item__txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ultrices
-                        dignissim lorem cursus commodo sit nunc. Dictumst purus eu odio risus, sollicitudin risus cras
-                        id. Odio egestas convallis tortor nec lorem diam morbi convallis. Est tellus ultrices sed
-                        sagittis</div><a
+                      <div class="owners-item__txt">Недвижимость – один из основных инструментов, который позволяет сохранить ресурсы в материальном виде. Но рынок не стоит на месте, а вместе с ним и потребности клиентов. Мы следим за тенденциями и знаем все новые объекты, в том числе на этапе закрытых продаж. За счет своевременного решения о продаже и дальнейшего перераспределения средств в более ликвидный объект, можно не только сохранить, но преумножить капитал</div>
+                      <a
                         class="btn owners-item__btn"
                         href="#"
                         @click.prevent="wantSaleHeandler"
@@ -102,13 +95,21 @@
           </div>
         </div>
       </div>
+      <PopUP
+      v-if="isVisible"
+      title="Оставьте ваши данные для обратной связи с менеджером"
+      @closePopup="isClosePopup"
+      />
 </template>
 <script>
 import { onMounted, ref } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import PopUP from './PopUP.vue';
 export default {
+  components: {
+    PopUP
+  },
   setup(props) {
     const trigger = ref(null);
     const imageOne = ref(null);
@@ -132,7 +133,7 @@ export default {
       tl2.to(
         imageTwo.value,
         {
-          yPercent: -30,
+          yPercent: -20,
           ease: "none",
         },
         "<"
@@ -148,7 +149,7 @@ export default {
       tl2.to(
         imageFour.value,
         {
-          yPercent: -30,
+          yPercent: 20,
           ease: "none",
         },
         "<"
@@ -157,16 +158,15 @@ export default {
 
     onMounted(() => {
       gsap.registerPlugin(ScrollTrigger);
-      gsap.registerPlugin(ScrollToPlugin);
       parallaxImages();
     });
 
+    const isVisible = ref(false)
     const wantSaleHeandler = () => {
-       gsap.to(window, {
-        duration: 1,
-        scrollTo: '#contacts',
-        ease: "power2",
-      });
+      isVisible.value = true
+    }
+    const isClosePopup = () => {
+      isVisible.value = false
     }
 
     return {
@@ -175,7 +175,9 @@ export default {
       imageTwo,
       imageThree,
       imageFour,
-      wantSaleHeandler
+      wantSaleHeandler,
+      isVisible,
+      isClosePopup
     };
   },
 };

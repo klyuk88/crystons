@@ -12,6 +12,7 @@
      <the-location></the-location>
      <the-contacts></the-contacts>
      <the-footer></the-footer>
+     <!-- <the-popup></the-popup> -->
 
    </div>
 </div>
@@ -30,6 +31,7 @@ import TheOwners from './components/TheOwners.vue'
 import TheLocation from './components/TheLocation.vue'
 import TheContacts from './components/TheContacts.vue'
 import TheFooter from './components/TheFooter.vue'
+// import PopUP from './components/PopUP.vue'
 
 export default {
   components: {
@@ -42,7 +44,8 @@ export default {
     TheOwners,
     TheLocation,
     TheContacts,
-    TheFooter
+    TheFooter,
+    // PopUP
     }
 }
 

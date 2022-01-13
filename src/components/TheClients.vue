@@ -107,7 +107,7 @@
                     <input class="contacts-form__input" name="Имя" type="text" placeholder="Имя" v-model="formInputs.name" required>
                     <input class="contacts-form__input" name="Телефон" type="tel" placeholder="Телефон" v-model="formInputs.phone" required v-maska="['+7 (###) ##-##-##', '+7 (###) ###-##-##']">
 
-                    <button class="contacts-form__btn btn quize-form-btn" type="submit">Отправить завяку</button>
+                    <button class="contacts-form__btn btn quize-form-btn" type="submit">Отправить заявку</button>
                   </div>
                   
               

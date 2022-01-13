@@ -2,9 +2,9 @@
   <div class="intro section">
     <div class="container">
       <h1 class="title intro-title">
-        <span class="intro-title__1">ВАШ ПАРТНЕР </span
-        ><span class="intro-title__2">ПО ПОИСКУ </span
-        ><span class="intro-title__3">НЕДВИЖИМОСТИ</span>
+        <span class="intro-title__1">НЕДВИЖИМОСТЬ </span
+        ><span class="intro-title__2">ДЛЯ ЖИЗНИ </span
+        ><span class="intro-title__3">И ИНВЕСТИЦИЙ</span>
       </h1>
       <div class="intro-gallery parallax-section" ref="trigger">
         <div class="intro-gallery__img intro-gallery__img--main">

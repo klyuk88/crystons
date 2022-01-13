@@ -5,7 +5,9 @@
         <h2 class="map-info-title">{{title}}</h2>
         <p class="map-info-text">{{about}}</p>
         <p class="map-info-price">Цена: {{numberFormatter(price)}}</p>
-        <a v-if="infoContentPresentation" :href="infoContentPresentation" download target="_blank"><button class="btn map-info-btn">Скачать презентацию</button></a>
+        <button class="btn map-info-btn"
+        @click="$emit('openPopMap')"
+        >Получить презентацию</button>
         </div>
 </div>
 </template>
@@ -17,11 +19,10 @@ export default {
     about: String,
     price: [Number, String],
     image: Number,
-    presentation: [Number, String, null],
   },
+  emits: ['openPopMap'],
   setup(props) {
     const infoContentImage = ref("")
-    const infoContentPresentation = ref("")
 
     const getMedia = async (imageId, link) => {
       let res = await fetch(
@@ -30,8 +31,6 @@ export default {
       let resData = await res.json();
       link["value"] = resData.source_url;
     };
-
-
 
     const numberFormatter = (param) => {
         if(Number(param)) {
@@ -44,20 +43,13 @@ export default {
     watch(() => props.image, (newVal) => {
       getMedia(newVal, infoContentImage)
     })
-    watch(() => props.presentation, (newVal) => {
-      getMedia(newVal, infoContentPresentation)
-    })
-
 
     onMounted(() => {
         getMedia(props.image, infoContentImage)
-        getMedia(props.presentation, infoContentPresentation)
     })
-
 
     return {
         infoContentImage,
-        infoContentPresentation,
         numberFormatter
         
     }

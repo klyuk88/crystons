@@ -24,7 +24,7 @@
                 :about="marker.acf.about"
                 :price="marker.acf.price"
                 :image="marker.featured_media"
-                :presentation="marker.acf.presentation"
+                @openPopMap="$emit('openPopMap')"
                 />
               </GMapInfoWindow>
             </GMapMarker>
@@ -41,6 +41,7 @@ export default {
     active: Boolean,
     objectsList: Array,
   },
+  emits: ['openPopMap'],
   setup(props) {
     const center = { lat: 55.74983742987991, lng: 37.622986214388256 };
     const options = {

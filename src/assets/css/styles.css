@@ -980,12 +980,13 @@ button:not([disabled]) {
 }
 
 .intro-title {
-  font-size: 125px;
-  line-height: 95%;
+  font-size: 110px;
+  line-height: 100%;
   letter-spacing: -0.02em;
   font-weight: 300;
   position: relative;
   z-index: 3;
+  text-align: center;
 }
 
 .intro-title--white {
@@ -1004,13 +1005,8 @@ button:not([disabled]) {
   display: inline-block;
 }
 
-.intro-title__1 {
-  margin-left: 68px;
-}
-
 .intro-title__2 {
   width: 100%;
-  text-align: right;
 }
 
 .intro-gallery {

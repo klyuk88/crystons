@@ -20,12 +20,11 @@
                   </div>
                   <div class="objects-card__links">
                     <a
-                    v-if="itemPresentation"
                       class="objects-card__link objects-card__back"
-                      :href="itemPresentation"
-                      target="_blank"
-                      download
-                      >СКАЧАТЬ ПРЕЗЕНТАЦИЮ</a
+                      href="#"
+                      @click.prevent="$emit('openPop')"
+                      >
+                      ПОЛУЧИТЬ ПРЕЗЕНТАЦИЮ</a
                     >
                   </div>
                 </div>
@@ -40,19 +39,21 @@
               </div>
             </div>
           </div>
+       
 </template>
 <script>
 import { ref, reactive, onMounted, watch } from "vue";
+
 export default {
   props: {
     name: String,
     adress: String,
     price: String,
     content: String,
-    imageId: [Number, String],
-    presentationId: [Number, String, null],
+    imageId: [Number, String]
   },
-  setup(props) {
+  emits: ['openPop'],
+  setup(props, context) {
  
     const numberFormatter = (param) => {
       if (Number(param)) {
@@ -63,7 +64,6 @@ export default {
     };
 
     const itemImage = ref("");
-    const itemPresentation = ref("");
 
     const getMedia = async (imageId, link) => {
       let res = await fetch(
@@ -77,12 +77,6 @@ export default {
       getMedia(newValue, itemImage)
     })
 
-    watch(() => props.presentationId, (newValue) => {
-      getMedia(newValue, itemPresentation)
-    })
-
-
-
     const objectOpen = ref(false);
     const openObjectInfo = () => {
       objectOpen.value = true;
@@ -93,7 +87,6 @@ export default {
 
     onMounted(() => {
       getMedia(props.imageId, itemImage);
-      getMedia(props.presentationId, itemPresentation);
     });
 
     return {
@@ -101,8 +94,7 @@ export default {
       openObjectInfo,
       closeObjectInfo,
       itemImage,
-      itemPresentation,
-      numberFormatter
+      numberFormatter,
     };
   },
 };
