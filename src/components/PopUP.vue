@@ -110,9 +110,13 @@ export default {
         padding: 50px
         position: relative
         text-align: center
+        @media screen and (max-width: 576px)
+            width: 95%
         .popup-title
             font-size: 25px
             font-family: 'Gilroy'
+            @media screen and (max-width: 576px)
+                font-size: 18px
         .close-popup
             position: absolute
             right: 10px
@@ -125,6 +129,8 @@ export default {
             flex-direction: column
             align-items: center
             margin-top: 30px
+            @media screen and (max-width: 576px)
+                margin-top: 20px
             input
                 border: none
                 border-bottom: 1px solid grey
@@ -132,7 +138,18 @@ export default {
                 width: 100%
                 padding: 15px
                 padding-left: 0
+                @media screen and (max-width: 576px)
+                    padding: 10px
+                    padding-left: 0
+                    margin-bottom: 10px
 
 .popup-wrap.visible
     display: flex
+
+
+.btn.popup-btn
+    @media screen and (max-width: 576px)
+        margin-top: 20px
+
+
 </style>
