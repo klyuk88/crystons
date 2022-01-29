@@ -232,7 +232,10 @@ export default {
             item.slug !== "post" &&
             item.slug !== "wp_block" &&
             item.slug !== "attachment" &&
-            item.slug !== "wp_template"
+            item.slug !== "wp_template" &&
+            item.slug !== "nav_menu_item" &&
+            item.slug !== "wp_navigation" &&
+            item.slug !== "wp_template_part"
           ) {
             return item;
           }
