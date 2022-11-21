@@ -1,4 +1,4 @@
-<template lang="">
+<template>
         <div class="clients section" id="clients">
         <div class="container">
           <div class="clients__title section-title">Клиентам</div>
