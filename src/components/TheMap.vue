@@ -5,7 +5,7 @@
              :center="center"
               :zoom="12"
               :options="options"
-              style="width: 100vw; min-height: 500px"
+              style="width: 100%; min-height: 800px"
             >
             <GMapMarker
             v-for="(marker, index) in objectsList" :key="index"
