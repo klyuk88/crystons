@@ -10,7 +10,7 @@ const app = createApp(App)
 app
 .use(VueGoogleMaps, {
     load: {
-        key: 'AIzaSyDaO1x0MYYbW4t0wgmru-JwsH8h2MJEJrM',
+        key: '',
     },
 })
 .use(Maska)
