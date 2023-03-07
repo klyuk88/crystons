@@ -7,7 +7,7 @@ $c = true;
 if ( $method === 'POST' ) {
 
 	$project_name = 'CRYSTONS';
-	$admin_email  = 'sc@crystons.ru';
+	$admin_email  = '';
 	$form_subject = 'Заявка с сайта CRYSTONS';
 
 	foreach ( $_POST as $key => $value ) {
@@ -23,7 +23,7 @@ if ( $method === 'POST' ) {
 } else if ( $method === 'GET' ) {
 
 	$project_name = 'CRYSTONS';
-	$admin_email  = 'klyukovskiy@yandex.ru';
+	$admin_email  = '';
 	$form_subject = 'Заявка с сайта';
 
 	foreach ( $_GET as $key => $value ) {
